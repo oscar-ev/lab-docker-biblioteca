@@ -201,6 +201,11 @@ details.explica dd{margin:0;color:var(--muted)}
 .quiz button.errado{border-color:var(--warn);background:var(--warn-soft)}
 .quiz-msg{font-size:.92rem;min-height:1.4em;margin-top:6px}
 
+.questoes{margin:14px 0 0;padding-left:1.6em;display:flex;flex-direction:column;gap:12px}
+.questoes li{padding-left:4px}
+.questoes .tema{display:inline-block;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--steel);border:1px solid var(--steel);border-radius:4px;padding:0 6px;margin-right:6px;vertical-align:1px}
+.copiar-word{font-family:var(--f-display);font-weight:800;font-size:1.05rem;background:var(--signal);color:#15212b;border:0;border-radius:10px;padding:12px 22px;cursor:pointer}
+.copiar-word.done{background:var(--ok);color:#fff}
 .faq details{border-bottom:1px solid var(--line);padding:10px 0}
 .faq summary{cursor:pointer;font-weight:700}
 .faq details p{margin:.5em 0}
@@ -504,6 +509,19 @@ details.explica dd{margin:0;color:var(--muted)}
         <li><b>Senha segura:</b> use <code>generate_password_hash</code> e <code>check_password_hash</code> do <code>werkzeug.security</code>.</li>
         <li><b>phpMyAdmin:</b> adicione um terceiro serviço no compose com a imagem <code>phpmyadmin</code> na porta 8080.</li>
       </ol>
+    </section>
+    <!-- 15 -->
+    <section class="step" id="p15" data-title="Questionário" data-grp="Entrega">
+      <div class="step-h"><div class="num">15</div><div><span class="kind k-arq">Word · entrega</span><h2>Questionário da atividade</h2></div></div>
+      <p class="intro">Responda com suas palavras, pensando no que você fez no laboratório. Copie as questões para o Word, responda abaixo de cada uma e entregue.</p>
+      <ol class="tarefas">
+        <li>Clique no botão amarelo abaixo. Ele copia o cabeçalho e as 10 questões.<br><button type="button" class="copiar-word" id="copiarWord">Copiar questões para o Word</button><div class="quiz-msg" id="copiarMsg" aria-live="polite"></div></li>
+        <li>Abra um documento novo no <b>Word</b> e cole com <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li>
+        <li>Preencha seu nome e turma e escreva cada resposta logo abaixo da pergunta.</li>
+        <li>No final do documento, cole <b>3 prints</b> (tecla <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>): a tela de login, a lista com o livro que você cadastrou e o terminal com <code>Running on http://127.0.0.1:5000</code>.</li>
+      </ol>
+      <h3>As questões</h3>
+      <ol class="questoes" id="questoes"><li><span class="tema">Docker</span>O que é um contêiner Docker e qual a vantagem de usá-lo nesta atividade, em vez de instalar o Python e o MySQL direto no computador?</li><li><span class="tema">Imagem</span>Qual a diferença entre imagem e contêiner? Cite a imagem usada pelo serviço db e a imagem base usada no Dockerfile.</li><li><span class="tema">Dockerfile</span>Explique para que serve o Dockerfile e o que fazem as instruções FROM, COPY, RUN e CMD.</li><li><span class="tema">Compose</span>Para que serve o arquivo docker-compose.yml? Quais são os dois serviços do projeto e qual a função de cada um?</li><li><span class="tema">Portas</span>No docker-compose.yml aparece "5000:5000". O que significa cada número? Em qual endereço o site abriria se fosse "8080:5000"?</li><li><span class="tema">Rede</span>Por que o app.py se conecta ao banco usando o endereço db (DB_HOST=db) e não localhost?</li><li><span class="tema">Volume</span>O que acontece com os livros cadastrados ao rodar docker compose down e depois ligar de novo? E com docker compose down -v? Explique o papel do volume dados_mysql.</li><li><span class="tema">SQL</span>Sobre as tabelas criadas no init.sql: o que significam PRIMARY KEY, AUTO_INCREMENT e NOT NULL? Dê um exemplo de cada um no projeto.</li><li><span class="tema">CRUD</span>Escreva os comandos SQL que o sistema usa para cadastrar, listar e excluir um livro. Em qual rota (@app.route) do app.py cada um aparece?</li><li><span class="tema">Login</span>Explique como funciona o login admin/admin: qual consulta SQL confere o usuário, para que serve a session e por que usamos %s em vez de juntar textos na consulta. Cite um problema de guardar a senha em texto puro.</li></ol>
     </section>
   </main>
 </div>
@@ -1021,6 +1039,37 @@ docker compose up --build</script>
     }, {rootMargin: '-30% 0px -60% 0px'});
     steps.forEach(function(s){ io.observe(s); });
   }
+})();
+</script>
+<script>
+(function(){
+  var btn = document.getElementById('copiarWord'), msg = document.getElementById('copiarMsg');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var qs = Array.prototype.map.call(document.querySelectorAll('#questoes li'), function(li){
+      var tema = li.querySelector('.tema').textContent;
+      return { tema: tema, texto: li.textContent.slice(tema.length) };
+    });
+    var cab = ['Atividade: Sistema de Biblioteca com Docker, Python e MySQL', 'Nome: ', 'Turma: ', 'Data: '];
+    var plano = cab.join('\n') + '\n\n' + qs.map(function(q, i){ return (i + 1) + '. ' + q.texto + '\nResposta: \n'; }).join('\n');
+    function e(s){ var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    var html = '<h2>' + e(cab[0]) + '</h2><p>Nome: <br>Turma: <br>Data: </p>' + qs.map(function(q, i){
+      return '<p><b>' + (i + 1) + '. ' + e(q.texto) + '</b></p><p>Resposta: </p><p>&nbsp;</p>'; }).join('');
+    function ok(){ btn.textContent = 'Copiado ✓ Agora cole no Word'; btn.classList.add('done'); msg.textContent = '';
+      setTimeout(function(){ btn.textContent = 'Copiar questões para o Word'; btn.classList.remove('done'); }, 2500); }
+    function plain(){
+      try { navigator.clipboard.writeText(plano).then(ok, manual); } catch(err) { manual(); }
+    }
+    function manual(){
+      var ta = document.createElement('textarea'); ta.value = plano; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); var c = false; try { c = document.execCommand('copy'); } catch(err) {}
+      ta.remove(); if (c) ok(); else msg.textContent = 'Não consegui copiar. Selecione as questões abaixo com o mouse e use Ctrl + C.';
+    }
+    try {
+      var item = new ClipboardItem({ 'text/html': new Blob([html], {type: 'text/html'}), 'text/plain': new Blob([plano], {type: 'text/plain'}) });
+      navigator.clipboard.write([item]).then(ok, plain);
+    } catch(err) { plain(); }
+  });
 })();
 </script>
 </body>
