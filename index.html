@@ -154,6 +154,8 @@ details.explica dd{margin:0;color:var(--muted)}
 .mini .futuro{opacity:.35}
 .mini .feito{color:var(--ok)}
 .mini .agora{background:var(--signal-soft);outline:2px solid var(--signal);border-radius:4px;padding:0 4px;font-weight:600}
+.mini .cm{font-family:var(--f-body);font-size:.78rem;color:var(--muted)}
+.mini a{color:inherit;text-decoration:none;border-bottom:1px dashed var(--steel)}
 .mini .nota{font-family:var(--f-body);font-size:.78rem;color:var(--warn);font-weight:700;margin-left:6px}
 
 /* mock de telas */
@@ -319,6 +321,10 @@ details.explica dd{margin:0;color:var(--muted)}
       </ol>
       <div class="resultado"><strong>Deu certo se…</strong>
         <p>na lateral esquerda do VS Code aparece o nome <b>BIBLIOTECA</b> (vazio por enquanto) e o terminal embaixo mostra um caminho que termina em <code>biblioteca</code>, por exemplo <code>C:\Users\aluno\Desktop\biblioteca&gt;</code>.</p></div>
+      <h3>O mapa do projeto</h3>
+      <p>Nos próximos passos você vai criar <b>8 arquivos</b>, um por passo, até a pasta ficar exatamente assim. Guarde este mapa: em cada passo ele aparece de novo, mostrando onde você está.</p>
+      <div class="mini mapa" id="mapa"></div>
+      <p style="font-size:.92rem;color:var(--muted)">Clique no nome de um arquivo para ir direto ao passo dele. O ✓ verde aparece quando você conclui o passo.</p>
       <h3>O botão que você vai usar a partir de agora</h3>
       <p>Na lateral, passe o mouse sobre <b>BIBLIOTECA</b>. Aparecem ícones. O primeiro, <b>New File</b> (Novo Arquivo), é o que cria arquivos:</p>
       <div class="vsmock" aria-hidden="true">
@@ -817,22 +823,45 @@ docker compose up --build</script>
   }
 
   /* ---------- receitas: criar arquivo, copiar, colar, salvar ---------- */
+  /* estrutura do projeto: [nome, nível, posição na ordem de criação, tipo, comentário] */
   var ARVORE = [
-    ['app/',1,1,'d'],['templates/',2,3,'d'],['base.html',3,3],['livros.html',3,5],['login.html',3,4],
-    ['app.py',2,2],['Dockerfile',2,6],['requirements.txt',2,1],
-    ['db/',1,0,'d'],['init.sql',2,0],['docker-compose.yml',1,7]
+    ['app/',1,1,'d','o site em Python'],['templates/',2,3,'d','as páginas HTML'],
+    ['base.html',3,3,'f','molde das páginas'],['livros.html',3,5,'f','tela de cadastro'],['login.html',3,4,'f','tela de login'],
+    ['app.py',2,2,'f','o servidor web'],['Dockerfile',2,6,'f','receita da caixa do Python'],['requirements.txt',2,1,'f','bibliotecas do Python'],
+    ['db/',1,0,'d','o banco de dados'],['init.sql',2,0,'f','cria as tabelas e o admin'],
+    ['docker-compose.yml',1,7,'f','liga as duas caixas']
   ];
-  function miniArvore(pos){
-    var linhas = ['<div class="cap">Sua lateral do VS Code deve ficar assim</div>', '<div class="r">▾ BIBLIOTECA</div>'];
-    ARVORE.forEach(function(it){
-      if (it[2] > pos) return;
-      var ind = new Array(it[1] + 1).join('   ');
-      if (it[3] === 'd') { linhas.push('<div class="r">' + ind + '▾ ' + it[0] + '</div>'); return; }
-      if (it[2] === pos) linhas.push('<div class="r">' + ind + '  <span class="agora">' + it[0] + '</span><span class="nota">← novo</span></div>');
-      else linhas.push('<div class="r feito">' + ind + '  ' + it[0] + ' ✓</div>');
-    });
-    return linhas.join('');
+  var PASSO_DO_ARQ = function(pos){ return 'p' + (pos + 4); };
+  function linhaArvore(it, pos, comComent){
+    var ind = new Array(it[1] + 1).join('   ');
+    var cls = 'r', extra = '';
+    if (it[3] === 'd') {
+      if (pos !== null && it[2] > pos) cls += ' futuro';
+      return '<div class="' + cls + '">' + ind + '▾ ' + it[0] + (comComent ? '<span class="cm">  ' + it[4] + '</span>' : '') + '</div>';
+    }
+    var feito = pos === null ? !!st.feitos[PASSO_DO_ARQ(it[2])] : it[2] < pos;
+    var nome = '<a href="#' + PASSO_DO_ARQ(it[2]) + '" data-ir="' + (it[2] + 3) + '">' + it[0] + '</a>';
+    if (pos !== null && it[2] === pos) { nome = '<span class="agora">' + it[0] + '</span>'; extra = '<span class="nota">← você está aqui</span>'; }
+    else if (pos !== null && it[2] > pos) { cls += ' futuro'; extra = '<span class="cm">  (passo ' + (it[2] + 4) + ')</span>'; }
+    else if (feito) { cls += ' feito'; extra = ' ✓'; }
+    if (comComent) extra += '<span class="cm">  ' + it[4] + ' · passo ' + (it[2] + 4) + '</span>';
+    return '<div class="' + cls + '">' + ind + '  ' + nome + extra + '</div>';
   }
+  function miniArvore(pos){
+    var l = ['<div class="cap">Estrutura do projeto · os apagados você cria depois</div>', '<div class="r">▾ BIBLIOTECA</div>'];
+    ARVORE.forEach(function(it){ l.push(linhaArvore(it, pos, false)); });
+    return l.join('');
+  }
+  function renderMapa(){
+    var m = document.getElementById('mapa'); if (!m) return;
+    var l = ['<div class="r">▾ BIBLIOTECA<span class="cm">  a pasta que você cria na Área de Trabalho</span></div>'];
+    ARVORE.forEach(function(it){ l.push(linhaArvore(it, null, true)); });
+    m.innerHTML = l.join('');
+  }
+  document.addEventListener('click', function(ev){
+    var a = ev.target.closest && ev.target.closest('a[data-ir]');
+    if (a && st.modo === 'foco') { ev.preventDefault(); ir(+a.dataset.ir); }
+  });
   var ICON_NOVO = '<svg viewBox="0 0 16 16"><path d="M4 1.5h5l3 3v6"/><path d="M12 13.5h-8v-12"/><path d="M12.5 11v4M10.5 13h4"/></svg>';
   document.querySelectorAll('.receita').forEach(function(r){
     var f = r.dataset.file, pos = +r.dataset.pos;
@@ -965,6 +994,7 @@ docker compose up --build</script>
     document.getElementById('fill').style.width = (n / steps.length * 100) + '%';
     document.getElementById('pct').textContent = n + ' de ' + steps.length;
     document.getElementById('fim').hidden = n !== steps.length;
+    renderMapa();
   }
 
   document.getElementById('modo').addEventListener('click', function(){
