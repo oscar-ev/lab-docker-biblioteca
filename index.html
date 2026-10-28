@@ -145,6 +145,11 @@ details.explica dd{margin:0;color:var(--muted)}
 .vs-row.in{background:var(--vs-sel);outline:1px solid var(--steel)}
 .vs-row input{font:inherit;background:transparent;border:0;color:inherit;padding:0;width:100%}
 .vs-hint{font-size:12px;color:var(--warn);font-weight:700;padding:4px 10px 8px;font-family:var(--f-body)}
+.vs-row.alvo{background:var(--vs-sel);outline:2px solid var(--warn);outline-offset:-2px}
+.vs-menu{margin:2px 10px 8px 44px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.18);padding:4px 0;max-width:180px}
+.vs-menu div{padding:3px 12px}
+.vs-menu .on{background:var(--steel);color:#fff;font-weight:700}
+.vs-vazio{margin:6px 10px;border:2px dashed var(--warn);border-radius:4px;padding:8px;text-align:center;font-size:12px;color:var(--warn);font-weight:700}
 .lado{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start}
 
 /* mini árvore */
@@ -330,17 +335,14 @@ details.explica dd{margin:0;color:var(--muted)}
       <p>Nos próximos passos você vai criar <b>8 arquivos</b>, um por passo, até a pasta ficar exatamente assim. Guarde este mapa: em cada passo ele aparece de novo, mostrando onde você está.</p>
       <div class="mini mapa" id="mapa"></div>
       <p style="font-size:.92rem;color:var(--muted)">Clique no nome de um arquivo para ir direto ao passo dele. O ✓ verde aparece quando você conclui o passo.</p>
-      <h3>O botão que você vai usar a partir de agora</h3>
-      <p>Na lateral, passe o mouse sobre <b>BIBLIOTECA</b>. Aparecem ícones. O primeiro, <b>New File</b> (Novo Arquivo), é o que cria arquivos:</p>
+      <h3>Como criar arquivos e pastas</h3>
+      <p>Nos próximos passos, sempre do mesmo jeito: clique com o <b>botão direito</b> na pasta onde o arquivo deve ficar e escolha <b>New File…</b> (ou <b>New Folder…</b> para criar uma pasta). Depois digite só o nome e aperte <kbd>Enter</kbd>.</p>
       <div class="vsmock" aria-hidden="true">
-        <div class="vs-h"><span class="t">BIBLIOTECA</span>
-          <span class="vs-ic alvo"><svg viewBox="0 0 16 16"><path d="M4 1.5h5l3 3v6"/><path d="M12 13.5h-8v-12"/><path d="M12.5 11v4M10.5 13h4"/></svg></span>
-          <span class="vs-ic"><svg viewBox="0 0 16 16"><path d="M1.5 3.5h5l1.5 1.5h6.5v5"/><path d="M1.5 3.5v9h8"/><path d="M12.5 11v4M10.5 13h4"/></svg></span>
-          <span class="vs-ic"><svg viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.5-3.5M12 2v3h-3"/></svg></span>
-        </div>
-        <div class="vs-hint">↑ New File (Novo Arquivo)</div>
+        <div class="vs-h"><span class="t">BIBLIOTECA</span></div>
+        <div class="vs-row alvo">▾ app</div>
+        <div class="vs-menu"><div class="on">New File…</div><div>New Folder…</div><div>Reveal in File Explorer</div></div>
       </div>
-      <div class="why"><strong>Truque importante</strong>Ao criar um arquivo, se você digitar o nome com pasta, como <code>db/init.sql</code>, o VS Code cria a pasta <b>db</b> sozinho. Por isso não precisa criar pastas à mão.</div>
+      <div class="why"><strong>Atenção</strong>O arquivo nasce <b>dentro da pasta em que você clicou</b>. Para criar algo solto na raiz (fora de todas as pastas), clique com o botão direito num <b>espaço vazio</b> da lateral, abaixo de tudo.</div>
     </section>
 
     <!-- 4 -->
@@ -348,7 +350,7 @@ details.explica dd{margin:0;color:var(--muted)}
       <div class="step-h"><div class="num">4</div><div><span class="kind k-arq">Arquivo 1 de 8</span><h2>O banco de dados: init.sql</h2></div></div>
       <p class="intro">Este arquivo cria as “planilhas” (tabelas) do banco: uma de <b>usuários</b> e uma de <b>livros</b>. Também cria o usuário <b>admin</b> com senha <b>admin</b>.</p>
       <div class="receita" id="f-sql" data-file="db/init.sql" data-src="c-sql" data-lang="sql" data-pos="0"></div>
-      <details class="explica"><summary>Quer entender o código? (opcional)</summary><dl>
+      <details class="explica"><summary>Entenda o código</summary><dl>
         <dt>CREATE TABLE</dt><dd>Cria uma tabela, que é como uma planilha: colunas fixas e uma linha por registro.</dd>
         <dt>INT AUTO_INCREMENT</dt><dd>Número que o banco gera sozinho: 1, 2, 3…</dd>
         <dt>PRIMARY KEY</dt><dd>A coluna que identifica cada linha. Não pode repetir.</dd>
@@ -371,7 +373,7 @@ details.explica dd{margin:0;color:var(--muted)}
       <div class="step-h"><div class="num">6</div><div><span class="kind k-arq">Arquivo 3 de 8</span><h2>O servidor web: app.py</h2></div></div>
       <p class="intro">O coração do sistema. Ele decide o que acontece quando alguém faz login, cadastra ou exclui um livro. É o maior arquivo: copie com o botão, não à mão.</p>
       <div class="receita" id="f-app" data-file="app/app.py" data-src="c-app" data-lang="python" data-pos="2"></div>
-      <details class="explica"><summary>Quer entender o código? (opcional)</summary><dl>
+      <details class="explica"><summary>Entenda o código</summary><dl>
         <dt>@app.route("/login")</dt><dd>Um “endereço” do site. Quando alguém abre <code>/login</code>, a função logo abaixo é executada.</dd>
         <dt>GET e POST</dt><dd>GET = abrir a página. POST = enviar o formulário.</dd>
         <dt>conectar()</dt><dd>Abre a conexão com o MySQL usando usuário e senha que vêm do docker-compose.</dd>
@@ -387,7 +389,7 @@ details.explica dd{margin:0;color:var(--muted)}
       <div class="step-h"><div class="num">7</div><div><span class="kind k-arq">Arquivo 4 de 8</span><h2>Página-molde: base.html</h2></div></div>
       <p class="intro">O “molde” das páginas: cores, fonte e o espaço para mensagens. As outras duas páginas usam este molde.</p>
       <div class="receita" id="f-base" data-file="app/templates/base.html" data-src="c-base" data-lang="xml" data-pos="3"></div>
-      <div class="alert"><strong>Atenção ao nome da pasta:</strong> é <code>templates</code>, no plural e minúsculo. Se escrever diferente, o Flask não encontra as páginas.</div>
+      <div class="alert"><strong>Atenção ao nome da pasta:</strong> é <code>templates</code>, no plural e minúsculo. Se escrever diferente, o Flask não encontra as páginas. Ela fica dentro da pasta <code>app</code>.</div>
     </section>
 
     <!-- 8 -->
@@ -420,7 +422,7 @@ details.explica dd{margin:0;color:var(--muted)}
       <p class="intro">Diz ao Docker para ligar <b>duas caixas</b>: o banco (<code>db</code>) e o site (<code>web</code>), e como uma encontra a outra. Este fica <b>fora</b> das pastas, direto na raiz.</p>
       <div class="receita" id="f-compose" data-file="docker-compose.yml" data-src="c-compose" data-lang="yaml" data-pos="7"></div>
       <div class="alert"><strong>Os espaços importam:</strong> neste tipo de arquivo (YAML), o recuo no começo das linhas faz parte do código. Por isso, cole sem mexer.</div>
-      <details class="explica"><summary>Quer entender o código? (opcional)</summary><dl>
+      <details class="explica"><summary>Entenda o código</summary><dl>
         <dt>services</dt><dd>A lista de caixas: <code>db</code> e <code>web</code>.</dd>
         <dt>image: mysql:8.0</dt><dd>Usa o MySQL pronto, baixado da internet.</dd>
         <dt>environment</dt><dd>Configurações: nome do banco, usuário e senha.</dd>
@@ -487,6 +489,9 @@ details.explica dd{margin:0;color:var(--muted)}
           <p>O Docker Desktop está fechado ou ainda iniciando. Abra, espere aparecer <b>Engine running</b> e tente de novo.</p></details>
         <details><summary>“no configuration file provided: not found”</summary>
           <p>O terminal não está na pasta <b>biblioteca</b>, ou o arquivo não se chama exatamente <code>docker-compose.yml</code>. Volte ao passo 3 e abra a pasta certa no VS Code.</p></details>
+        <details><summary>Pastas repetidas (app dentro de app, templates dentro de templates)</summary>
+          <p>Algum arquivo foi criado dentro da pasta errada. Cole este comando no terminal do VS Code: ele coloca cada arquivo no lugar certo e mostra <b>OK</b> ou <b>FALTA</b> para cada um. As pastas bagunçadas vão para <code>_velho</code>, que você pode apagar depois.</p>
+          <div class="code" data-src="c-arrumar" data-lang="powershell" data-name="Terminal do VS Code (Windows)"></div></details>
         <details><summary>“TemplateNotFound: login.html”</summary>
           <p>A pasta das páginas precisa ser <code>app/templates</code>. Compare sua lateral do VS Code com a árvore dos passos 7 a 9.</p></details>
         <details><summary>Mudei o app.py e o site não mudou</summary>
@@ -822,6 +827,10 @@ docker compose down</script>
 <script type="text/plain" id="c-reset">docker compose down -v
 docker compose up --build</script>
 
+<script type="text/plain" id="c-arrumar">$destino = @{"init.sql"="db"; "requirements.txt"="app"; "app.py"="app"; "Dockerfile"="app"; "base.html"="app\templates"; "login.html"="app\templates"; "livros.html"="app\templates"; "docker-compose.yml"="."}
+New-Item -ItemType Directory -Force -Path "_novo\app\templates","_novo\db","_velho" | Out-Null
+foreach ($n in $destino.Keys) { $f = Get-ChildItem -Recurse -File -Filter $n | Where-Object { $_.FullName -notmatch '\\_(novo|velho)\\' } | Select-Object -First 1; if ($f) { Move-Item $f.FullName (Join-Path "_novo" $destino[$n]) -Force; "OK     $n" } else { "FALTA  $n" } }
+Move-Item app, db _velho; Move-Item _novo\* .; Remove-Item _novo</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js"></script>
 <script>
@@ -866,7 +875,7 @@ docker compose up --build</script>
     return '<div class="' + cls + '">' + ind + '  ' + nome + extra + '</div>';
   }
   function miniArvore(pos){
-    var l = ['<div class="cap">Estrutura do projeto · os apagados você cria depois</div>', '<div class="r">▾ BIBLIOTECA</div>'];
+    var l = ['<div class="cap">Mapa · os apagados você cria nos próximos passos</div>', '<div class="r">▾ BIBLIOTECA</div>'];
     ARVORE.forEach(function(it){ l.push(linhaArvore(it, pos, false)); });
     return l.join('');
   }
@@ -880,23 +889,35 @@ docker compose up --build</script>
     var a = ev.target.closest && ev.target.closest('a[data-ir]');
     if (a && st.modo === 'foco') { ev.preventDefault(); ir(+a.dataset.ir); }
   });
-  var ICON_NOVO = '<svg viewBox="0 0 16 16"><path d="M4 1.5h5l3 3v6"/><path d="M12 13.5h-8v-12"/><path d="M12.5 11v4M10.5 13h4"/></svg>';
+  var PASTA_NOVA = {0: ['', 'db'], 1: ['', 'app'], 3: ['app', 'templates']};
+  function ondeClicar(pai){
+    if (!pai) return 'num <b>espaço vazio</b> da lateral, abaixo de tudo';
+    var p = pai.split('/');
+    return 'na pasta <b>' + esc(p[p.length - 1]) + '</b>' + (p.length > 1 ? ' (que fica dentro de <b>' + esc(p[0]) + '</b>)' : '');
+  }
+  function mockMenu(pai, item, nome){
+    var alvo = pai ? '<div class="vs-row alvo">▾ ' + esc(pai.split('/').pop()) + '</div>' : '<div class="vs-vazio">espaço vazio · botão direito aqui</div>';
+    return '<div class="vsmock" aria-hidden="true"><div class="vs-h"><span class="t">BIBLIOTECA</span></div>' + alvo +
+      '<div class="vs-menu"><div' + (item === 'f' ? ' class="on"' : '') + '>New File…</div><div' + (item === 'd' ? ' class="on"' : '') + '>New Folder…</div></div>' +
+      '<div class="vs-row in" style="margin-left:' + (pai ? 22 : 0) + 'px"><input tabindex="-1" readonly value="' + esc(nome) + '"></div><div class="vs-hint">digite o nome e aperte Enter ↵</div></div>';
+  }
+  function pilula(nome){ return '<button type="button" class="pill-copy" data-copy="' + esc(nome) + '">' + esc(nome) + '</button>'; }
   document.querySelectorAll('.receita').forEach(function(r){
     var f = r.dataset.file, pos = +r.dataset.pos;
-    var nomeCurto = f.split('/').pop();
-    r.innerHTML =
-      '<ol class="tarefas">' +
-        '<li>Na lateral do VS Code, clique num <b>espaço vazio</b> abaixo dos arquivos (para nenhuma pasta ficar selecionada). Depois passe o mouse sobre <b>BIBLIOTECA</b> e clique no ícone <b>New File</b>.</li>' +
-        '<li>Vai aparecer uma caixinha para o nome. Digite exatamente assim (ou copie aqui) e aperte <kbd>Enter</kbd>:<br>' +
-          '<button type="button" class="pill-copy" data-copy="' + esc(f) + '">' + esc(f) + '</button>' +
-          '<div class="vsmock" aria-hidden="true"><div class="vs-h"><span class="t">BIBLIOTECA</span><span class="vs-ic alvo">' + ICON_NOVO + '</span></div>' +
-          '<div class="vs-row in"><input tabindex="-1" readonly value="' + esc(f) + '"></div><div class="vs-hint">↵ Enter</div></div></li>' +
-        '<li>O arquivo <b>' + esc(nomeCurto) + '</b> abre vazio no meio da tela. Agora clique no botão amarelo <b>Copiar</b>:' +
-          '<div class="code' + (r.dataset.src === 'c-app' ? ' longo' : '') + '" data-src="' + r.dataset.src + '" data-lang="' + r.dataset.lang + '" data-name="' + esc(f) + '"></div></li>' +
-        '<li>Clique dentro do arquivo vazio no VS Code e cole com <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li>' +
-        '<li>Salve com <kbd>Ctrl</kbd> + <kbd>S</kbd>. Quando está salvo, a bolinha branca ao lado do nome, na aba, desaparece.</li>' +
-      '</ol>' +
-      '<div class="mini">' + miniArvore(pos) + '</div>';
+    var partes = f.split('/'), nome = partes.pop(), pai = partes.join('/');
+    var html = '<ol class="tarefas">';
+    var pn = PASTA_NOVA[pos];
+    if (pn) {
+      html += '<li><b>Primeiro, crie a pasta ' + esc(pn[1]) + '.</b> Clique com o botão direito ' + ondeClicar(pn[0]) + ' e escolha <b>New Folder…</b> no menu. Digite só este nome e aperte <kbd>Enter</kbd>:<br>' + pilula(pn[1]) + mockMenu(pn[0], 'd', pn[1]) + '</li>';
+    }
+    html += '<li>Agora crie o arquivo. Clique com o botão direito ' + ondeClicar(pai) + ' e escolha <b>New File…</b> no menu. Digite só este nome e aperte <kbd>Enter</kbd>:<br>' + pilula(nome) + mockMenu(pai, 'f', nome) + '</li>' +
+      '<li>O arquivo <b>' + esc(nome) + '</b> abre vazio no meio da tela. Clique no botão amarelo <b>Copiar</b>:' +
+        '<div class="code' + (r.dataset.src === 'c-app' ? ' longo' : '') + '" data-src="' + r.dataset.src + '" data-lang="' + r.dataset.lang + '" data-name="' + esc(f) + '"></div></li>' +
+      '<li>Clique dentro do arquivo no VS Code e cole com <kbd>Ctrl</kbd> + <kbd>V</kbd>.</li>' +
+      '<li>Salve com <kbd>Ctrl</kbd> + <kbd>S</kbd>. Quando está salvo, a bolinha branca ao lado do nome, na aba, desaparece.</li>' +
+      '<li>Confira: a lateral do VS Code tem que estar igual a este mapa. O arquivo novo está em amarelo.<div class="mini">' + miniArvore(pos) + '</div></li>' +
+    '</ol>';
+    r.innerHTML = html;
   });
   document.querySelectorAll('.pill-copy').forEach(function(b){
     b.addEventListener('click', function(){
